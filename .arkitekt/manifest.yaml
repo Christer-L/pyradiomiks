@@ -1,0 +1,7 @@
+author: Christer-L
+entrypoint: app
+identifier: pyradiomiks
+requirements: []
+scopes:
+- read
+version: 0.0.1
