@@ -1,67 +1,33 @@
 from arkitekt import register
 import time
-
+from mikro.api.schema import RepresentationFragment, from_xarray
+import numpy as np
+from skimage.filters import gaussian
 
 @register
-def generate_n_string(n: int = 10, timeout: int = 2) -> str:
-    """Generate N Strings
+def gaussian(image: RepresentationFragment, sigma: float) -> RepresentationFragment:
+    """A simple gaussian filter
 
-    This function generates {{n}} strings with a {{timeout}} ms timeout between each string
-
+    This function applies gaussian filter to the imags.
 
     Parameters
     ----------
-    n : int, optional
-        The number of iterations, by default 10
-    timeout : int, optional
-        The timeout, by default 2
+    image : RepresentationFragment
+        The input image
+
+    sigma : Gaussian filter radius
 
     Returns
     -------
-    str
-        A string with Hello {n}
+    RepresentationFragment
+        The blurred image
+
     """
-    for i in range(n):
-        print(i)
-        time.sleep(timeout)
-        yield f"Hello {i}"
+    image_gaussian = gaussian(np.array(image.data), sigma=sigma)
+    image_gaussian = np.array(image_gaussian)
+    return from_xarray(
+        image_gaussian, name="Gaussian_" + image.name, origins=[image]
+    )
 
 
-@register
-def append_world(hello: str) -> str:
-    """Append World
 
-    This function appends world to the input string
-
-    Parameters
-    ----------
-    hello : str
-        The input string
-
-    Returns
-    -------
-    str
-        {{hello}} World
-    """ """"""
-    return hello + " World"
-
-
-@register
-def print_string(input: str) -> str:
-    """Print String
-
-    This function prints the input string to
-    the console
-
-    Parameters
-    ----------
-    input : str
-        The input string
-
-     Returns
-    -------
-    str
-        The printed string
-    """
-    print(input)
-    return input
